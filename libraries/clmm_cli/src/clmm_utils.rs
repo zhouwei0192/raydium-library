@@ -359,7 +359,8 @@ pub fn calculate_swap_change(
     })
 }
 
-fn load_cur_and_next_five_tick_array(
+
+pub fn load_cur_and_next_five_tick_array(
     rpc_client: &RpcClient,
     raydium_v3_program: Pubkey,
     pool_id: Pubkey,
