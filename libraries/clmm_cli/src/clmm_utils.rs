@@ -13,7 +13,7 @@ use solana_client::rpc_client::RpcClient;
 use solana_sdk::pubkey::Pubkey;
 use std::{
     collections::VecDeque,
-    ops::{DerefMut, Neg},
+    ops::{DerefMut, Neg}, time,
 };
 
 pub fn create_pool_price(
@@ -409,7 +409,11 @@ pub fn load_cur_and_next_five_tick_array(
         );
         max_array_size -= 1;
     }
+    let start = time::Instant::now();
+
     let tick_array_rsps = rpc_client.get_multiple_accounts(&tick_array_keys).unwrap();
+    println!("get tick account time: {:?}", start.elapsed());
+
     let mut tick_arrays = VecDeque::new();
     for tick_array in tick_array_rsps {
         let tick_array_state = common_utils::deserialize_anchor_account::<
@@ -447,7 +451,7 @@ pub fn get_out_put_amount_and_remaining_accounts(
         tickarray_bitmap_extension,
         tick_arrays,
     )?;
-    println!("tick_array_start_index:{:?}", tick_array_start_index_vec);
+    // println!("tick_array_start_index:{:?}", tick_array_start_index_vec);
 
     Ok((amount_calculated, tick_array_start_index_vec))
 }
